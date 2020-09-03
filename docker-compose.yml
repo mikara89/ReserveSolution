@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    ports:
+        - 5672:5672
+        - 15672:15672
+    environment:
+            - RABBITMQ_DEFAULT_USER=user
+            - RABBITMQ_DEFAULT_PASS=password
+    image: rabbitmq:3-management
+
+  gatewayapi.web:
+    image: ${DOCKER_REGISTRY-}gatewayapiweb
+    build:
+      context: .
+      dockerfile: GatewayAPI/GateWayAPI.Web/Dockerfile
+
+  team.api:
+    image: ${DOCKER_REGISTRY-}teamapi
+    build:
+      context: .
+      dockerfile: APIs/Team/Team.Api/Dockerfile
+
+
+  identityservice:
+    image: ${DOCKER_REGISTRY-}identityservice
+    build:
+      context: .
+      dockerfile: IdentityServer/IdentityService/Dockerfile
+
+
+  sendmailservice:
+    image: ${DOCKER_REGISTRY-}sendmailservice
+    build:
+      context: .
+      dockerfile: NonAPIService/MailSendService/MailSendService/Dockerfile
+

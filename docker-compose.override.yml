@@ -1,0 +1,51 @@
+version: '3.4'
+
+services:
+  gatewayapi.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - IDENTITY_AUTHORITY=http://IdentityService:80"/
+      - AUTHORITY_ISSUER=https://localhost:5000/ 
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  team.api:
+    environment:
+      - IDENTITY_AUTHORITY=http://IdentityService:80/
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5111:80"
+
+
+  identityservice:
+    environment:
+      - IDENTITY_AUTHORITY=http://10.0.0.10:80/
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "5000:443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    restart: on-failure
+    depends_on:
+            - rabbitmq 
+
+  sendmailservice:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+    ports:
+      - "80"
+      - "443"
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+    restart: on-failure
+    depends_on:
+            - rabbitmq 
+    
