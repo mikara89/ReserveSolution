@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,31 +18,33 @@ namespace Team.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class TeamController : ControllerBase
     {
         private readonly TeamDBContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<TeamController> _logger;
+        private readonly IAuthorizationService authorizationService;
 
-        public TeamController(TeamDBContext context,IMapper mapper,ILogger<TeamController> logger)
+        public TeamController(TeamDBContext context,IMapper mapper,ILogger<TeamController> logger,IAuthorizationService authorizationService)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            this.authorizationService = authorizationService;
         }
 
         // GET: api/Team
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams()
         {
+            
+
             var teams = await _context.Teams.ToListAsync();
             return _mapper.Map<List<TeamEntity>, List<TeamDto>>(teams);
         }
 
         // GET: api/Team/5
         [HttpGet("{id}")]
-        [Authorize/*(ClaimPolicy.TeamClaimPolicy)*/]
         public async Task<ActionResult<TeamDto>> GetTeam(string id)
         {
             var team = await _context.Teams.FindAsync(id);
@@ -58,24 +61,26 @@ namespace Team.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTeam(string id, TeamEntity team)
+        public async Task<IActionResult> PutTeam(string id, TeamUpdate teamUpdate)
         {
-            if (id != team.Id)
-            {
-                return BadRequest();
-            }
-            if (TeamRegNumberExists(team.RegNumber))
+
+            if (TeamRegNumberExists(teamUpdate.RegNumber))
             {
                 _logger.LogInformation("Registration number already taken.");
                 return Conflict("Registration number already taken.");
             }
                 
-            if (TeamNameExists(team.TeamName))
+            if (TeamNameExists(teamUpdate.TeamName))
             {
                 _logger.LogInformation("Registration team name already taken.");
                 return Conflict("Registration team name already taken.");
             }
-                
+
+            var team = _context.Teams.FirstOrDefault(t => t.Id == id);
+            var userId = User.FindFirst(JwtClaimTypes.Subject).Value;
+
+            if (team == null || userId!= team.UserId)
+                return BadRequest();
 
             _context.Entry(team).State = EntityState.Modified;
 
@@ -117,7 +122,10 @@ namespace Team.Api.Controllers
             }
 
 
-            var team = new TeamEntity();
+            var team = new TeamEntity() { 
+                UserId= User.FindFirst(JwtClaimTypes.Subject).Value
+            };
+
             _mapper.Map(teamCreate, team);
 
             _context.Teams.Add(team);
@@ -151,9 +159,19 @@ namespace Team.Api.Controllers
                 return NotFound();
             }
 
+            var userId = User.FindFirst(JwtClaimTypes.Subject).Value;
+            var IsSuperUser = (await authorizationService.AuthorizeAsync(User, ClaimPolicy.SuperUserClaimPolicy)).Succeeded;
+
+            if (userId!= team.UserId || !IsSuperUser)
+            {
+                _logger.LogInformation("Team can't be deleted if user is not owner or SuperUser.");
+                return Forbid("Team can't be deleted if user is not owner or SuperUser.");
+            }
+                
             _context.Teams.Remove(team);
+
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Team deleted.");
+            _logger.LogInformation("Team deleted"+(IsSuperUser?" by SuperUser.": " by owner."));
 
             return _mapper.Map<TeamEntity, TeamDto>(team);
         }

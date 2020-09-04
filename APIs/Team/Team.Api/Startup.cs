@@ -36,7 +36,9 @@ namespace Team.Api
                 options.UseInMemoryDatabase("TeamDB");
             });
             services.AddAutoMapper(typeof(Startup));
+
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+
             var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             services.AddSwaggerGen(confg =>
             {
@@ -69,7 +71,7 @@ namespace Team.Api
                         }
                     }
                 });
-                //API key for sending mails
+
                 confg.AddSecurityDefinition(ApiKeyAuthenticationOptions.DefaultScheme, new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.ApiKey,
@@ -81,18 +83,8 @@ namespace Team.Api
 
             services.AddAuthorization(cfg =>
             {
-                ////Claim only for SuperUser
-                //cfg.AddPolicy(ClaimPolicy.SuperUserClaimPolicy, p => p.RequireClaim(UserClaims.SuperUser, "True"));
-
-                //cfg.AddPolicy(ClaimPolicy.TeamClaimPolicy, p => p
-                //.RequireAssertion(context =>
-                ////Claim for any users
-                //context.User.HasClaim(c => c.Type == UserClaims.TeamApi) &&
-                ////Claim for not banned users
-                //context.User.HasClaim(c => c.Type == UserClaims.IsBanned && c.Value == "False") ||
-                ////Claim for SuperUser
-                //context.User.HasClaim(c => c.Type == UserClaims.SuperUser))
-                //);
+                //Claim only for SuperUser
+                cfg.AddPolicy(ClaimPolicy.SuperUserClaimPolicy, p => p.RequireClaim(UserClaims.SuperUser, "True"));
             });
 
             services.AddCors(cofing =>
@@ -135,15 +127,9 @@ namespace Team.Api
 
             app.UseCors("AllowAll");
 
-            var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Team Api");
-                c.OAuthClientId(appSettings.ClientId);
-                c.OAuthAppName(appSettings.AppName);
-                c.OAuth2RedirectUrl($"{appSettings.RedirectSwagger}oauth2-redirect.html"); 
-                //c.OAuth2RedirectUrl($"http://localhost:5111/swagger/oauth2-redirect.html"); 
-                c.OAuthUsePkce();
             });
 
             app.UseAuthorization();

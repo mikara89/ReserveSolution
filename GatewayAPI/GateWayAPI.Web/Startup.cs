@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GateWayAPI.Web.Options;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,24 +31,34 @@ namespace GateWayAPI.Web
         public void ConfigureServices(IServiceCollection services)
         {
             Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
-            var issuer = Configuration["IDENTITY_AUTHORITY"];
-            var authenticationProviderKey = "TeamKey";
-            Console.WriteLine("IDENTITY_AUTHORITY: " + issuer);
-            Action<IdentityServerAuthenticationOptions> options = o =>
-            {
-                o.ApiName = "TeamAPI";
-                o.RequireHttpsMetadata = false;//===>CHANGE IN PRODATION
-                                               // auth server base endpoint (this will be used to search for disco doc)
-                o.Authority = issuer;
-            };
 
-            services.AddAuthentication()
-                .AddIdentityServerAuthentication(authenticationProviderKey, options);
-
-
-            services.AddControllers();
+            
+            services.Configure<AppIdSwagger>(Configuration.GetSection(nameof(AppIdSwagger)));
+            var appIdSwagger = Configuration.GetSection(nameof(AppIdSwagger)).Get<AppIdSwagger>();
             services.AddOcelot(Configuration);
             services.AddSwaggerForOcelot(Configuration);
+
+            var issuer = Configuration["IDENTITY_AUTHORITY"];
+            Console.WriteLine("IDENTITY_AUTHORITY: " + issuer);
+
+
+            for (int i = 0; i < appIdSwagger.AuthKeys.Length; i++)
+            {
+                var key = appIdSwagger.AuthKeys[i];
+                var apiName = appIdSwagger.ApiNames[i];
+                services.AddAuthentication()
+                    .AddIdentityServerAuthentication(key, o =>
+                    {
+                        o.ApiName = apiName;
+                        o.RequireHttpsMetadata = false;//===>CHANGE IN PRODATION
+                        o.SupportedTokens = SupportedTokens.Both;
+                        o.Authority = issuer;
+                    });
+            }
+                
+           
+            services.AddControllers();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,9 +73,14 @@ namespace GateWayAPI.Web
             
             app.UseRouting();
 
-            //app.UseSwagger();
-
-            app.UseSwaggerForOcelotUI(confg=> { confg.OAuthUsePkce(); });
+            var appIdSwagger = Configuration.GetSection(nameof(AppIdSwagger)).Get<AppIdSwagger>();
+            var url = Configuration["url"];
+            app.UseSwaggerForOcelotUI(confg=> {
+                confg.OAuthUsePkce();
+                confg.OAuthClientId(appIdSwagger.ClientId);
+                confg.OAuthAppName(appIdSwagger.AppName);
+                confg.OAuth2RedirectUrl($"{url}swagger/oauth2-redirect.html");
+            });
 
             app.UseAuthorization();
 
@@ -72,6 +88,7 @@ namespace GateWayAPI.Web
             {
                 endpoints.MapControllers();
             });
+   
 
             await app.UseOcelot();
         }

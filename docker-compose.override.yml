@@ -5,7 +5,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
-      - IDENTITY_AUTHORITY=http://IdentityService:80"/
+      - IDENTITY_AUTHORITY=http://IdentityService:80/
       - AUTHORITY_ISSUER=https://localhost:5000/ 
     ports:
       - "80"
@@ -16,9 +16,11 @@ services:
   team.api:
     environment:
       - IDENTITY_AUTHORITY=http://IdentityService:80/
+      - ASPNETCORE_URLS=https://+:443;http://+:80
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "5111:80"
+      - "80"
+      - "443"
 
 
   identityservice:

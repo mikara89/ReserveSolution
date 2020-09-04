@@ -20,7 +20,10 @@ namespace GateWayAPI.Web
             Host.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((host, config) =>
                 {
-                    config.AddJsonFile("ocelot.json");
+
+                     config.AddJsonFile("ocelot.json");
+
+
                 })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
