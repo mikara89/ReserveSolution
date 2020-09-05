@@ -15,6 +15,7 @@ namespace Team.Api.Options
             operation.Responses.Add("201", new OpenApiResponse { Description = "Created" });
             operation.Responses.Add("401", new OpenApiResponse { Description = "Unauthorized" });
             operation.Responses.Add("403", new OpenApiResponse { Description = "Forbidden" });
+            operation.Responses.Add("409", new OpenApiResponse { Description = "Conflict" });
             operation.Responses.Add("400", new OpenApiResponse { Description = "BadRequest" });
             operation.Responses.Add("500", new OpenApiResponse { Description = "Internal Server error" });
 

@@ -87,7 +87,7 @@ namespace Team.Api.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TeamDto>> PostTeam(TeamCreate teamCreate)
+        public async Task<IActionResult> PostTeam(TeamCreate teamCreate)
         {
             var command = new TeamCreateCommand(teamCreate, UserId);
             
@@ -106,7 +106,7 @@ namespace Team.Api.Controllers
 
         // DELETE: api/Team/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TeamDto>> DeleteTeam(string id)
+        public async Task<IActionResult> DeleteTeam(string id)
         {
             var IsSuperUser = (await _authorizService.AuthorizeAsync(User, ClaimPolicy.SuperUserClaimPolicy)).Succeeded;
             var query =new TeamDeleteCommand( id,UserId, IsSuperUser);
@@ -114,7 +114,7 @@ namespace Team.Api.Controllers
             try
             {
                 var result = await _mediator.Send(query);
-                return result;
+                return Ok(result);
             }
             catch (Exception ex)
             {

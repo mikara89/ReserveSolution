@@ -25,12 +25,10 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "https://localhost:32985/team",
-					"protocol": "https",
+					"raw": "{{url}}/team",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team"
 					]
@@ -69,12 +67,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team",
-					"protocol": "https",
+					"raw": "{{url}}/team",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team"
 					]
@@ -114,12 +110,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team",
-					"protocol": "https",
+					"raw": "{{url}}/team",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team"
 					]
@@ -159,12 +153,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team",
-					"protocol": "https",
+					"raw": "{{url}}/team",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team"
 					]
@@ -205,12 +197,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -249,12 +239,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -295,12 +283,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -342,12 +328,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -395,12 +379,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -440,12 +422,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -483,12 +463,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -530,12 +508,10 @@
 					}
 				},
 				"url": {
-					"raw": "https://localhost:32985/team/{{Id}}",
-					"protocol": "https",
+					"raw": "{{url}}/team/{{Id}}",
 					"host": [
-						"localhost"
+						"{{url}}"
 					],
-					"port": "32985",
 					"path": [
 						"team",
 						"{{Id}}"
@@ -550,7 +526,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTkzMTA5MTAsImV4cCI6MTU5OTMxNDUxMCwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5MzEwODcyLCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.utem01CWSoJL9iC-njaHCdDFCeODXZAod1FJDM7-tjdA7EEi-BuPlrRAroNAiDz2PgnZs2qB-JO8Wk3g3ph24VccNZYjA8oedli5Eo_JI4e3pyHFWX2dUDwygzFr8qGxGx0nyVtojWKY6uGtRpDHBaEVln3Zar90elW4UnOPs4Go32IIQx2xqL3MBn4lBoiZ6xKRaLUAsBDwvUeJyFuZ9jwfnQvNJ2ZjptE3dTKbyhNqOy3j80pe0e4FnRY6MRYeXxi-cTAE7tVKfsPqLLyQsmBm3WIA89THFYO7GLklOH2MMJk438XbQnsrhTT6iTOzmB1IQ4roeEd4Ir0p-Hgv2Q",
+				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTkzMjUzNDQsImV4cCI6MTU5OTMyODk0NCwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5MzI1MzQzLCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.QyoK8LBgwvzz6EhVa_fCTlEn-t361WZb-aPkD4HO14hu1oHXMDEHyUOTKIgGVv0JDrzYkbqTUFES0QO9ZN0qPy44YSPXV2aiyjo6s6dBNj4kEdinlQDXmnPQNw4QC3ghzlv3m_vWJjm7Ir1etTTfywobyvtMEnhKv-_A77J9Dvt8YNY5oF8xhcBL6kf5K0Nd7voW9CXzj3VrHzZ_cE7kSDuZlubs-eAynjhaXH4sHiv1YBz82aZH_OJRw6xo1MjzQp77KS-4RCTyOrqYwPMIC8wOkfOl-Jar2wuaT5QQYg4fPWBHTI1qh3mcGqr9ziZ-z7ThZDNmliflI1b8YBkl9w",
 				"type": "string"
 			},
 			{
