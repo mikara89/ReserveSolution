@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Team.Api.Options;
 using Team.Data.Persistence;
+using Team.Domains.Models;
+using Team.Service.Commands;
+using Team.Service.Hendlers;
+using Team.Service.Queries;
 
 namespace Team.Api
 {
@@ -35,7 +40,18 @@ namespace Team.Api
                 //options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
                 options.UseInMemoryDatabase("TeamDB");
             });
+
             services.AddAutoMapper(typeof(Startup));
+
+            #region MediatoR
+            services.AddMediatR(typeof(Startup));
+            services.AddTransient<IRequestHandler<GetAllTeamsQuery, List<TeamDto>>, GetAllTeamsHandler>();
+            services.AddTransient<IRequestHandler<GetTeamByIdQuery, TeamDto>, GetTeamByIdHandler>();
+            services.AddTransient<IRequestHandler<TeamCreateCommand, TeamDto>, TeamCreateHandler>();
+            services.AddTransient<IRequestHandler<TeamUpdateCommand, TeamDto>, TeamUpdateHandler>();
+            services.AddTransient<IRequestHandler<TeamDeleteCommand, TeamDto>, TeamDeleteHandler>();
+            #endregion
+
 
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
 

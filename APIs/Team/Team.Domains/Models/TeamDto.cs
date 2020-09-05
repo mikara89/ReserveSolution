@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Team.Api.Models
+namespace Team.Domains.Models
 {
     public class TeamDto 
     {

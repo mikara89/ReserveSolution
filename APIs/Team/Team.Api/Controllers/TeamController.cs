@@ -4,15 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using IdentityModel;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Team.Api.Models;
 using Team.Api.Options;
 using Team.Data.Models.Entites;
 using Team.Data.Persistence;
+using Team.Domains.Models;
+using Team.Service.Commands;
+using Team.Service.Exceptions;
+using Team.Service.Queries;
 
 namespace Team.Api.Controllers
 {
@@ -20,41 +24,39 @@ namespace Team.Api.Controllers
     [ApiController]
     public class TeamController : ControllerBase
     {
-        private readonly TeamDBContext _context;
-        private readonly IMapper _mapper;
-        private readonly ILogger<TeamController> _logger;
-        private readonly IAuthorizationService authorizationService;
 
-        public TeamController(TeamDBContext context,IMapper mapper,ILogger<TeamController> logger,IAuthorizationService authorizationService)
+        private readonly IMediator _mediator;
+        private readonly IAuthorizationService _authorizService;
+        private string UserId=> User.FindFirst(JwtClaimTypes.Subject).Value;
+        public TeamController(IMediator mediator,IAuthorizationService authorizationService)
         {
-            _context = context;
-            _mapper = mapper;
-            _logger = logger;
-            this.authorizationService = authorizationService;
+            _mediator = mediator;
+            _authorizService = authorizationService;
         }
 
         // GET: api/Team
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TeamDto>>> GetTeams()
+        public async Task<IActionResult> GetTeams()
         {
-            
-
-            var teams = await _context.Teams.ToListAsync();
-            return _mapper.Map<List<TeamEntity>, List<TeamDto>>(teams);
+            var query = new GetAllTeamsQuery();
+            var result = await _mediator.Send(query);
+            return Ok(result);
+         
         }
 
         // GET: api/Team/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TeamDto>> GetTeam(string id)
+        public async Task<IActionResult> GetTeam(string id)
         {
-            var team = await _context.Teams.FindAsync(id);
+            var query = new GetTeamByIdQuery(id);
+            var result = await _mediator.Send(query);
 
-            if (team == null)
+            if (result == null)
             {
                 return NotFound();
             }
-
-            return _mapper.Map<TeamEntity, TeamDto>(team);
+            return Ok(result);
+            
         }
 
         // PUT: api/Team/5
@@ -63,44 +65,22 @@ namespace Team.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTeam(string id, TeamUpdate teamUpdate)
         {
-
-            if (TeamRegNumberExists(teamUpdate.RegNumber))
+            var command = new TeamUpdateCommand(id, teamUpdate, UserId);
+            try 
             {
-                _logger.LogInformation("Registration number already taken.");
-                return Conflict("Registration number already taken.");
+                var result = await _mediator.Send(command);
+                return NoContent();
             }
-                
-            if (TeamNameExists(teamUpdate.TeamName))
+            catch (Exception ex)
             {
-                _logger.LogInformation("Registration team name already taken.");
-                return Conflict("Registration team name already taken.");
-            }
-
-            var team = _context.Teams.FirstOrDefault(t => t.Id == id);
-            var userId = User.FindFirst(JwtClaimTypes.Subject).Value;
-
-            if (team == null || userId!= team.UserId)
-                return BadRequest();
-
-            _context.Entry(team).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Team created");
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TeamExists(id))
-                {
+                if (ex is AlreadyExistException)
+                    return Conflict(ex.Message);
+                else if (ex is NotExistException)
                     return NotFound();
-                }
                 else
-                {
-                    throw;
-                }
+                    return BadRequest();
+                throw;
             }
-            return NoContent();
         }
 
         // POST: api/Team
@@ -109,84 +89,43 @@ namespace Team.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<TeamDto>> PostTeam(TeamCreate teamCreate)
         {
-            if (TeamRegNumberExists(teamCreate.RegNumber))
-            {
-                _logger.LogInformation("Registration number already taken.");
-                return Conflict("Registration number already taken.");
-            }
-
-            if (TeamNameExists(teamCreate.TeamName))
-            {
-                _logger.LogInformation("Registration team name already taken.");
-                return Conflict("Registration team name already taken.");
-            }
-
-
-            var team = new TeamEntity() { 
-                UserId= User.FindFirst(JwtClaimTypes.Subject).Value
-            };
-
-            _mapper.Map(teamCreate, team);
-
-            _context.Teams.Add(team);
+            var command = new TeamCreateCommand(teamCreate, UserId);
+            
             try
             {
-                await _context.SaveChangesAsync();
+                var result = await _mediator.Send(command);
+                return CreatedAtAction("GetTeam", new { id = result.Id }, result);
             }
-            catch (DbUpdateException)
+            catch (Exception ex)
             {
-                if (TeamExists(team.Id))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                if (ex is AlreadyExistException)
+                    return Conflict(ex.Message);
+                throw;
             }
-
-            return CreatedAtAction("GetTeam", new { id = team.Id }, _mapper.Map<TeamEntity, TeamDto>(team));
         }
 
         // DELETE: api/Team/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<TeamDto>> DeleteTeam(string id)
         {
-            var team = await _context.Teams.FindAsync(id);
-            if (team == null)
+            var IsSuperUser = (await _authorizService.AuthorizeAsync(User, ClaimPolicy.SuperUserClaimPolicy)).Succeeded;
+            var query =new TeamDeleteCommand( id,UserId, IsSuperUser);
+            
+            try
             {
-                _logger.LogInformation("Team don't exist.");
-                return NotFound();
+                var result = await _mediator.Send(query);
+                return result;
             }
-
-            var userId = User.FindFirst(JwtClaimTypes.Subject).Value;
-            var IsSuperUser = (await authorizationService.AuthorizeAsync(User, ClaimPolicy.SuperUserClaimPolicy)).Succeeded;
-
-            if (userId!= team.UserId || !IsSuperUser)
+            catch (Exception ex)
             {
-                _logger.LogInformation("Team can't be deleted if user is not owner or SuperUser.");
-                return Forbid("Team can't be deleted if user is not owner or SuperUser.");
+                if (ex is NotAllowedException)
+                    return Forbid(ex.Message);
+                else if (ex is NotExistException)
+                    return NotFound();
+                else
+                    return BadRequest();
+                throw;
             }
-                
-            _context.Teams.Remove(team);
-
-            await _context.SaveChangesAsync();
-            _logger.LogInformation("Team deleted"+(IsSuperUser?" by SuperUser.": " by owner."));
-
-            return _mapper.Map<TeamEntity, TeamDto>(team);
-        }
-
-        private bool TeamExists(string id)
-        {
-            return _context.Teams.Any(e => e.Id == id);
-        }
-        private bool TeamRegNumberExists(int regNumber)  
-        {
-            return _context.Teams.Any(e => e.RegNumber == regNumber);
-        }
-        private bool TeamNameExists(string teamName) 
-        {
-            return _context.Teams.Any(e => e.TeamName == teamName);
         }
     }
 }

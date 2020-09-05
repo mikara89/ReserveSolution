@@ -1,0 +1,591 @@
+{
+	"info": {
+		"_postman_id": "763a083d-4590-495c-bd9c-2484254cdee4",
+		"name": "test ReserveSolution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllTeams",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "de238340-b487-4d07-8726-207ae84c6c1f",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:32985/team",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTeam",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bc321a3b-2b6d-4f80-8d49-d7a4253392dc",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"Id\", jsonData.id);\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"  pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 1111\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTeamConflictRegNum",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "2425ee2c-cd15-4fed-9bd7-59496bd363ef",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"pm.test(\"Create conflict teamName\", () => {\r",
+							"    pm.response.to.have.body(\"Registration number already taken.\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"teamName\": \"stringsadasfasfasf\",\r\n  \"regNumber\": 1111\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateTeamConflictTeamName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "facfa45e-c7de-4b99-9e3c-625e3739061b",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"pm.test(\"Create conflict teamName\", () => {\r",
+							" pm.response.to.have.body(\"Registration team name already taken.\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 11115555\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTeam200",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "73f1f9ba-2621-4faf-8ec4-3ca1e59ea551",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutTeam",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bc321a3b-2b6d-4f80-8d49-d7a4253392dc",
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"  pm.response.to.have.status(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"teamName\": \"stringsw3\",\r\n    \"regNumber\": 1112342\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutTeamConflictRegNum",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d36a0498-0ce4-408f-9706-452265e75e41",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"pm.test(\"Update conflict regNumbr\", () => {\r",
+							"    pm.response.to.have.body(\"Registration number already taken.\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"regNumber\": 1112342\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PutTeamConflictTeamName",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f46fb667-17d4-45dc-a101-cfb5667dfeb8",
+						"exec": [
+							"pm.test(\"Status code is 409\", function () {\r",
+							"  pm.response.to.have.status(409);\r",
+							"});\r",
+							"pm.test(\"Update conflict teamName\", () => {\r",
+							" pm.response.to.have.body(\"Registration team name already taken.\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"teamName\": \"stringsw3\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTeam200AfterPut",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ebb9edaf-7235-42e7-96a0-95627eb0092b",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   \r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Team Updated\", () => {\r",
+							" const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.teamName).to.eql(\"stringsw3\");\r",
+							"    pm.expect(responseJson.regNumber).to.eql(1112342);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteTeam",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bc321a3b-2b6d-4f80-8d49-d7a4253392dc",
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);\r",
+							"pm.environment.set(\"Id\", jsonData.id);\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"  pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteTeam404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8c45cd52-8f0b-4d2a-bf3a-a07719fba239",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetTeam404",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bc321a3b-2b6d-4f80-8d49-d7a4253392dc",
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"  pm.response.to.have.status(404);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:32985/team/{{Id}}",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "32985",
+					"path": [
+						"team",
+						"{{Id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "oauth2",
+		"oauth2": [
+			{
+				"key": "accessToken",
+				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTkzMTA5MTAsImV4cCI6MTU5OTMxNDUxMCwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5MzEwODcyLCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.utem01CWSoJL9iC-njaHCdDFCeODXZAod1FJDM7-tjdA7EEi-BuPlrRAroNAiDz2PgnZs2qB-JO8Wk3g3ph24VccNZYjA8oedli5Eo_JI4e3pyHFWX2dUDwygzFr8qGxGx0nyVtojWKY6uGtRpDHBaEVln3Zar90elW4UnOPs4Go32IIQx2xqL3MBn4lBoiZ6xKRaLUAsBDwvUeJyFuZ9jwfnQvNJ2ZjptE3dTKbyhNqOy3j80pe0e4FnRY6MRYeXxi-cTAE7tVKfsPqLLyQsmBm3WIA89THFYO7GLklOH2MMJk438XbQnsrhTT6iTOzmB1IQ4roeEd4Ir0p-Hgv2Q",
+				"type": "string"
+			},
+			{
+				"key": "tokenType",
+				"value": "Bearer",
+				"type": "string"
+			},
+			{
+				"key": "addTokenTo",
+				"value": "header",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "da627077-6a9d-44c4-929d-c60a536565e1",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0466eb1d-b3ab-46a2-9eb1-8ac1855e44e3",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

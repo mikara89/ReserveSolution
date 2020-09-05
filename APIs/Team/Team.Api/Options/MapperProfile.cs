@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using System;
-using Team.Api.Models;
 using Team.Data.Models.Entites;
+using Team.Domains.Models;
 
 namespace Team.Api.Options
 {
