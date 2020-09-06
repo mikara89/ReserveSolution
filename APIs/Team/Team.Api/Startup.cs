@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Team.Api.Filters;
 using Team.Api.Options;
 using Team.Data.Persistence;
 using Team.Domains.Models;
@@ -126,7 +129,15 @@ namespace Team.Api
                     options.Authority = issuer;
                 }); ;
 
-            services.AddControllers();
+            services.AddControllers(
+                options =>
+                {
+                    options.Filters.Add<ValidationFilter>();
+                })
+                .AddFluentValidation(opt =>
+                {
+                    opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                }); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

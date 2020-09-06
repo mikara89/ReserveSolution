@@ -59,7 +59,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 1111\r\n}",
+					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 123356458\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -86,11 +86,13 @@
 					"script": {
 						"id": "2425ee2c-cd15-4fed-9bd7-59496bd363ef",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"  pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"pm.test(\"Create conflict teamName\", () => {\r",
-							"    pm.response.to.have.body(\"Registration number already taken.\");\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors.RegNumber[0])\r",
+							"        .to.eql(\"Registration number already taken.\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -102,7 +104,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"teamName\": \"stringsadasfasfasf\",\r\n  \"regNumber\": 1111\r\n}",
+					"raw": "{\r\n  \"teamName\": \"stringsadasfasfasf\",\r\n  \"regNumber\": 123356458\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -129,11 +131,13 @@
 					"script": {
 						"id": "facfa45e-c7de-4b99-9e3c-625e3739061b",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"  pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"pm.test(\"Create conflict teamName\", () => {\r",
-							" pm.response.to.have.body(\"Registration team name already taken.\");\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors.TeamName[0])\r",
+							"        .to.eql(\"Team name already taken.\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -145,7 +149,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 11115555\r\n}",
+					"raw": "{\r\n  \"teamName\": \"string\",\r\n  \"regNumber\": 236545985\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -231,7 +235,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"teamName\": \"stringsw3\",\r\n    \"regNumber\": 1112342\r\n}",
+					"raw": "{\r\n    \"teamName\": \"stringsw3\",\r\n    \"regNumber\": 695758624\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -259,11 +263,13 @@
 					"script": {
 						"id": "d36a0498-0ce4-408f-9706-452265e75e41",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"  pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
-							"pm.test(\"Update conflict regNumbr\", () => {\r",
-							"    pm.response.to.have.body(\"Registration number already taken.\");\r",
+							"pm.test(\"Update conflict teamName\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors.RegNumber[0])\r",
+							"        .to.eql(\"Registration number already taken.\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -275,7 +281,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"regNumber\": 1112342\r\n}",
+					"raw": "{\r\n    \"regNumber\": 695758624\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -303,11 +309,13 @@
 					"script": {
 						"id": "f46fb667-17d4-45dc-a101-cfb5667dfeb8",
 						"exec": [
-							"pm.test(\"Status code is 409\", function () {\r",
-							"  pm.response.to.have.status(409);\r",
+							"pm.test(\"Status code is 400\", function () {\r",
+							"  pm.response.to.have.status(400);\r",
 							"});\r",
 							"pm.test(\"Update conflict teamName\", () => {\r",
-							" pm.response.to.have.body(\"Registration team name already taken.\");\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.errors.TeamName[0])\r",
+							"        .to.eql(\"Team name already taken.\");\r",
 							"});\r",
 							""
 						],
@@ -355,7 +363,7 @@
 							"pm.test(\"Team Updated\", () => {\r",
 							" const responseJson = pm.response.json();\r",
 							"    pm.expect(responseJson.teamName).to.eql(\"stringsw3\");\r",
-							"    pm.expect(responseJson.regNumber).to.eql(1112342);\r",
+							"    pm.expect(responseJson.regNumber).to.eql(695758624);\r",
 							"});\r",
 							""
 						],
@@ -526,7 +534,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTkzMjUzNDQsImV4cCI6MTU5OTMyODk0NCwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5MzI1MzQzLCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.QyoK8LBgwvzz6EhVa_fCTlEn-t361WZb-aPkD4HO14hu1oHXMDEHyUOTKIgGVv0JDrzYkbqTUFES0QO9ZN0qPy44YSPXV2aiyjo6s6dBNj4kEdinlQDXmnPQNw4QC3ghzlv3m_vWJjm7Ir1etTTfywobyvtMEnhKv-_A77J9Dvt8YNY5oF8xhcBL6kf5K0Nd7voW9CXzj3VrHzZ_cE7kSDuZlubs-eAynjhaXH4sHiv1YBz82aZH_OJRw6xo1MjzQp77KS-4RCTyOrqYwPMIC8wOkfOl-Jar2wuaT5QQYg4fPWBHTI1qh3mcGqr9ziZ-z7ThZDNmliflI1b8YBkl9w",
+				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTkzODM2NzgsImV4cCI6MTU5OTM4NzI3OCwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5MzgzNjc1LCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.RPepH8RuGbFU3DPdjXFDImf1wwF4JmLAQ8ZD-4wpGvIp7MTDXyNaJHPfi8NEovCuV6PnIU6foRN8v701RzEZQipP9LkOJY08PnB7136OX3XgeRXdvUiHiieeNcjELwWNndmlW6vBcjb9BvFYLjMO28GIzXAXPdlEh3sKuP_MjidFS4RUUC6u5lXe-ROmxss8bGG5wZPqAWmISfReU_omHaG_fgo5vXP0OqkJFkRXWBMtXjWhpdq0--7tZW5q_mn_ASSqYf7gqsCthumL4OmtN7LeIGBjnkWYZv1JkNQomjXOxnDXpN0mVcqTD7ln6XaYXreX4CLR8ZfijMMVbWHsSQ",
 				"type": "string"
 			},
 			{
