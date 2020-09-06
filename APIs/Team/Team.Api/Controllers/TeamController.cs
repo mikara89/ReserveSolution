@@ -73,9 +73,7 @@ namespace Team.Api.Controllers
             }
             catch (Exception ex)
             {
-                if (ex is AlreadyExistException)
-                    return Conflict(ex.Message);
-                else if (ex is NotExistException)
+                if (ex is NotExistException)
                     return NotFound();
                 else
                     return BadRequest();
@@ -90,18 +88,8 @@ namespace Team.Api.Controllers
         public async Task<IActionResult> PostTeam(TeamCreate teamCreate)
         {
             var command = new TeamCreateCommand(teamCreate, UserId);
-            
-            try
-            {
-                var result = await _mediator.Send(command);
-                return CreatedAtAction("GetTeam", new { id = result.Id }, result);
-            }
-            catch (Exception ex)
-            {
-                if (ex is AlreadyExistException)
-                    return Conflict(ex.Message);
-                throw;
-            }
+            var result = await _mediator.Send(command);
+            return CreatedAtAction("GetTeam", new { id = result.Id }, result);
         }
 
         // DELETE: api/Team/5
@@ -109,7 +97,7 @@ namespace Team.Api.Controllers
         public async Task<IActionResult> DeleteTeam(string id)
         {
             var IsSuperUser = (await _authorizService.AuthorizeAsync(User, ClaimPolicy.SuperUserClaimPolicy)).Succeeded;
-            var query =new TeamDeleteCommand( id,UserId, IsSuperUser);
+            var query = new TeamDeleteCommand(id, UserId, IsSuperUser);
             
             try
             {

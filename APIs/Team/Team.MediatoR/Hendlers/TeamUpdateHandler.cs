@@ -30,22 +30,19 @@ namespace Team.Service.Hendlers
 
         public async Task<TeamDto> Handle(TeamUpdateCommand request, CancellationToken cancellationToken)
         {
-            if (TeamRegNumberExists(request.TeamUpdate.RegNumber))
-            {
-                _logger.LogInformation("Registration number already taken.");
-                throw new AlreadyExistException("Registration number already taken.");
-            }
-
-            if (TeamNameExists(request.TeamUpdate.TeamName))
-            {
-                _logger.LogInformation("Registration team name already taken.");
-                throw new AlreadyExistException("Registration team name already taken.");
-            }
 
             var team = _context.Teams.FirstOrDefault(t => t.Id == request.TeamId);
 
-            if (team == null || request.UserId != team.UserId) 
-                throw new Exception();
+            if (team == null)
+            {
+                _logger.LogInformation("Team with given Id not exist.");
+                throw new NotExistException();
+            }
+            if (request.UserId != team.UserId)
+            {
+                _logger.LogInformation("Team can't be changed if user is not owner.");
+                throw new NotAllowedException("Team can't be changed if user is not owner.");
+            }
 
             _context.Entry(team).State = EntityState.Modified;
 
@@ -58,30 +55,10 @@ namespace Team.Service.Hendlers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TeamExists(request.TeamId))
-                {
-                    _logger.LogInformation("Team with given Id not exist.");
-                    throw new NotExistException();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
         }
-
-        private bool TeamExists(string id)
-        {
-            return _context.Teams.Any(e => e.Id == id);
-        }
-        private bool TeamRegNumberExists(int regNumber)
-        {
-            return _context.Teams.Any(e => e.RegNumber == regNumber);
-        }
-        private bool TeamNameExists(string teamName)
-        {
-            return _context.Teams.Any(e => e.TeamName == teamName);
-        }
+       
     }
 }
