@@ -81,24 +81,17 @@ namespace IdentityService
                         TeamClientApi.Name,
                         StandardScopes.Profile}
                 },
+             
                 new Client
                 {
-                    ClientId = "gw_api_postman",
-                    ClientName = "GWApi",
+                    ClientId = "gw_api_postman_pw",
                     ClientSecrets = {new Secret("My very secret secret".Sha256())}, // change me!
-
-                    AllowedGrantTypes = GrantTypes.Code,
-                    RequirePkce = true,
-                    RequireClientSecret = false,
-                    RequireConsent=false,
-
-
-                    RedirectUris = {$"https://oauth.pstmn.io/v1/callback" },
-                    AllowedCorsOrigins = {"https://oauth.pstmn.io" },
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedScopes = {
                         TeamApi.Name,
                         TeamPlayerApi.Name,
                         TeamClientApi.Name,
+                        StandardScopes.OpenId,
                         StandardScopes.Profile}
                 }
             };

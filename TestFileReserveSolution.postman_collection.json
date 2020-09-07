@@ -533,12 +533,7 @@
 		"oauth2": [
 			{
 				"key": "accessToken",
-				"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImxRVkZRdXA4ckdmS2NmTTNnY0Q4WEEiLCJ0eXAiOiJhdCtqd3QifQ.eyJuYmYiOjE1OTk0MjU5NzIsImV4cCI6MTU5OTQyOTU3MiwiaXNzIjoiaHR0cDovLzEwLjAuMC4xMDo4MC8iLCJhdWQiOlsiVGVhbUFQSSIsIlRlYW1QbGF5ZXJBUEkiLCJUZWFtQ2xpZW50QVBJIl0sImNsaWVudF9pZCI6Imd3X2FwaV9wb3N0bWFuIiwic3ViIjoiZjc4ODIxNTMtMjA3Ny00MzZkLTk0YjAtODIyYmM2Yjg5ZGM0IiwiYXV0aF90aW1lIjoxNTk5NDI1OTcwLCJpZHAiOiJsb2NhbCIsIlN1cGVyVXNlciI6IlRydWUiLCJzY29wZSI6WyJUZWFtQXBpIiwiVGVhbVBsYXllckFwaSIsIlRlYW1DbGllbnRBcGkiXSwiYW1yIjpbInB3ZCJdfQ.saeM2LtdPv4kGN1AejDE0bdofnXkM--YZKx_qnLiwMjFYblOChVDue7ysvJqhT-8E9QSObOfTcbiIJY7pgDVqN7KUB-n80XqOA4-wG2Fd0sYejWC907tj6CYeBPx6J0lNuUrSSBcOx5Bxsqu1s0OiIw5Z4ZztTUiY2fq_DEWlwP7hX5xwFZNS2nTNKtt9sIDD6iPCzjQ1a7C6Wtk5ziIAFNuo3oahiWEU3qVzUn2X23n7RNfsUSWWPyjKAZ3S06jSm5BDT0-K9-CGdI_0zJzQ6YxcabWKERQ8HjJpOt5VGgtTNt-XW1XCT-U0LtPpfZmWuDmVGnUv4hwoly0o4G1_g",
-				"type": "string"
-			},
-			{
-				"key": "tokenType",
-				"value": "Bearer",
+				"value": "{{TOKEN}}",
 				"type": "string"
 			},
 			{
@@ -555,6 +550,43 @@
 				"id": "da627077-6a9d-44c4-929d-c60a536565e1",
 				"type": "text/javascript",
 				"exec": [
+					"const authCall={",
+					"    url: pm.collectionVariables.get('authUrl')+'/connect/token',",
+					"    method: 'POST',",
+					"    header: 'Content-Type:application/x-www-form-urlencoded',",
+					"    body: {",
+					"            mode: 'urlencoded',",
+					"            urlencoded: [",
+					"                    { key: \"client_id\", value: 'gw_api_postman_pw', enable:true },",
+					"                    { key: \"client_secret\", value: 'My very secret secret', enable:true  },",
+					"                    { key: \"username\", value: 'smikaric@team.com', enable:true  },",
+					"                    { key: \"password\", value: 'mikara@89Team', enable:true  },",
+					"                    { key: \"scope\", value: 'TeamApi', enable:true  },",
+					"                    { key: \"grant_type\", value: 'password', enable:true  },",
+					"            ]",
+					"        }",
+					"    } ",
+					"",
+					" ",
+					"",
+					"    function authFunc (){",
+					"        if(!pm.collectionVariables.get(\"TOKEN\"))",
+					"        {",
+					"            pm.sendRequest(authCall, function(err, res){",
+					"                if (err) {",
+					"                    console.log(err);",
+					"                } else {",
+					"                    pm.collectionVariables.set(\"TOKEN\", res.json().access_token);",
+					"            }} );",
+					"        }",
+					"        else{",
+					"            console.log(\"Already Loged\")",
+					"        }",
+					"    };",
+					"    authFunc ();  ",
+					"                                  ",
+					"",
+					"",
 					""
 				]
 			}
@@ -572,13 +604,23 @@
 	],
 	"variable": [
 		{
-			"id": "18cbb7bf-487b-488e-8474-61a24a4cb98b",
+			"id": "9162f6b3-d30a-4c45-b476-13ec18639d4b",
 			"key": "url",
-			"value": "https://localhost:32775"
+			"value": "https://localhost:32782"
 		},
 		{
-			"id": "ddab9ebc-7d26-402d-b75d-c72b00e7ce68",
+			"id": "90091a53-6c65-4e08-a757-2db4ec18372a",
 			"key": "Id",
+			"value": ""
+		},
+		{
+			"id": "1524f2f6-a53e-4ae8-bc3f-b0dc71718e1b",
+			"key": "authUrl",
+			"value": "https://localhost:5000"
+		},
+		{
+			"id": "69e89c08-ebdb-4eb2-9a4d-eaa27b8ab1fe",
+			"key": "TOKEN",
 			"value": ""
 		}
 	],
