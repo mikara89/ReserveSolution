@@ -80,6 +80,7 @@ namespace GateWayAPI.Web
                 confg.OAuthClientId(appIdSwagger.ClientId);
                 confg.OAuthAppName(appIdSwagger.AppName);
                 confg.OAuth2RedirectUrl($"{url}swagger/oauth2-redirect.html");
+                
             });
 
             app.UseAuthorization();

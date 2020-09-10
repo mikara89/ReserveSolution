@@ -22,10 +22,10 @@ namespace IdentityService
 
         public static Scope TeamApi = 
             new Scope(nameof(TeamApi),"full" );
-        public static Scope TeamPlayerApi =
-            new Scope(nameof(TeamPlayerApi), "full");
-        public static Scope TeamClientApi =
-            new Scope(nameof(TeamClientApi), "full");
+        public static Scope PlayerApi =
+            new Scope(nameof(PlayerApi), "full");
+        public static Scope ClientApi =
+            new Scope(nameof(ClientApi), "full");
 
 
         public static IEnumerable<ApiResource> GetApis =>
@@ -37,18 +37,18 @@ namespace IdentityService
                     { 
                         Scopes = new List<Scope>{TeamApi}
                     },
-                    new ApiResource("TeamPlayerAPI","TeamPlayerAPI", new string[]
+                    new ApiResource("PlayerAPI","PlayerAPI", new string[]
                         {
                             UserClaims.SuperUser,
                         })
-                    { Scopes=new List<Scope>{TeamPlayerApi}
+                    { Scopes=new List<Scope>{PlayerApi}
                     },
-                    new ApiResource("TeamClientAPI","TeamClientAPI", new string[]
+                    new ApiResource("ClientAPI","ClientAPI", new string[]
                         {
                             UserClaims.SuperUser,
                         })
                     { Scopes={
-                            TeamClientApi,
+                            ClientApi,
                         }
                     }, new ApiResource("GWAPI","GWAPI", new string[]
                         {
@@ -77,8 +77,8 @@ namespace IdentityService
                     AllowedCorsOrigins = {appSettings.GWTeamUrl[0..^1] },
                     AllowedScopes = {
                         TeamApi.Name,
-                        TeamPlayerApi.Name,
-                        TeamClientApi.Name,
+                        PlayerApi.Name,
+                        ClientApi.Name,
                         StandardScopes.Profile}
                 },
              
@@ -89,8 +89,8 @@ namespace IdentityService
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     AllowedScopes = {
                         TeamApi.Name,
-                        TeamPlayerApi.Name,
-                        TeamClientApi.Name,
+                        PlayerApi.Name,
+                        ClientApi.Name,
                         StandardScopes.OpenId,
                         StandardScopes.Profile}
                 }

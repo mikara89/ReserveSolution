@@ -39,9 +39,20 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Data", "APIs\Team\Team.Data\Team.Data.csproj", "{1F8538AB-8B41-43DD-9617-30E02BA89014}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Team.Service", "APIs\Team\Team.MediatoR\Team.Service.csproj", "{1918A854-A188-4627-8E92-A485AA0A3581}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Service", "APIs\Team\Team.MediatoR\Team.Service.csproj", "{1918A854-A188-4627-8E92-A485AA0A3581}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Team.Domains", "APIs\Team\Team.Domains\Team.Domains.csproj", "{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Domains", "APIs\Team\Team.Domains\Team.Domains.csproj", "{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Team.Messanger.Sender", "APIs\Team\Team.Messanger.Sender\Team.Messanger.Sender.csproj", "{82789CD4-C537-4504-80E9-4DC718EED30B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83194172-368D-4D4C-AAE9-91948F615DD2}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player.Api", "APIs\Player\Player.Api\Player.Api.csproj", "{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player.Data", "APIs\Player\Player.Data\Player.Data.csproj", "{EB04B7F1-4268-47CF-BE32-FF0AC0800587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +108,18 @@ Global
 		{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82789CD4-C537-4504-80E9-4DC718EED30B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82789CD4-C537-4504-80E9-4DC718EED30B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82789CD4-C537-4504-80E9-4DC718EED30B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82789CD4-C537-4504-80E9-4DC718EED30B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB04B7F1-4268-47CF-BE32-FF0AC0800587}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB04B7F1-4268-47CF-BE32-FF0AC0800587}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB04B7F1-4268-47CF-BE32-FF0AC0800587}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB04B7F1-4268-47CF-BE32-FF0AC0800587}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -117,6 +140,9 @@ Global
 		{1F8538AB-8B41-43DD-9617-30E02BA89014} = {819CC817-5D48-4333-8CC7-934CD0F64782}
 		{1918A854-A188-4627-8E92-A485AA0A3581} = {819CC817-5D48-4333-8CC7-934CD0F64782}
 		{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC} = {819CC817-5D48-4333-8CC7-934CD0F64782}
+		{82789CD4-C537-4504-80E9-4DC718EED30B} = {819CC817-5D48-4333-8CC7-934CD0F64782}
+		{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA} = {C7F01F88-D1E0-45EB-8664-16B26F2A49E8}
+		{EB04B7F1-4268-47CF-BE32-FF0AC0800587} = {C7F01F88-D1E0-45EB-8664-16B26F2A49E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4840D749-80EA-4E1C-B271-BEDED2B91147}

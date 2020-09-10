@@ -37,3 +37,10 @@ services:
       context: .
       dockerfile: NonAPIService/MailSendService/MailSendService/Dockerfile
 
+
+  player.api:
+    image: ${DOCKER_REGISTRY-}playerapi
+    build:
+      context: .
+      dockerfile: APIs/Player/Player.Api/Dockerfile
+

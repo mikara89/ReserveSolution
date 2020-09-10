@@ -31,7 +31,41 @@
       "SwaggerKey": "team",
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "TeamKey",
-        "AllowedScopes": ["TeamApi"]
+        "AllowedScopes": [ "TeamApi" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/player/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "Player.Api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/player/{everything}",
+      "UpstreamHttpMethod": [ "Get", "POST", "PUT", "DELETE" ],
+      "SwaggerKey": "player",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "PlayerKey",
+        "AllowedScopes": [ "PlayerApi" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/player/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "Player.Api",
+          "Port": 80
+        }
+      ],
+      "UpstreamPathTemplate": "/player",
+      "UpstreamHttpMethod": [ "Get", "POST"],
+      "SwaggerKey": "player",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "PlayerKey",
+        "AllowedScopes": [ "PlayerApi" ]
       }
     }
   ],
@@ -51,12 +85,12 @@
       ]
     },
     {
-      "Key": "teamplayer",
+      "Key": "player",
       "Config": [
         {
           "Name": "Team Player API",
           "Version": "v1",
-          "Url": "http://TeamPlayer.Api/swagger/v1/swagger.json"
+          "Url": "http://Player.Api/swagger/v1/swagger.json"
         }
       ]
     },
@@ -66,7 +100,7 @@
         {
           "Name": "Team Client API",
           "Version": "v1",
-          "Url": "http://TeamClient.Api/swagger/v1/swagger.json"
+          "Url": "http://Client.Api/swagger/v1/swagger.json"
         }
       ]
     }
