@@ -17,21 +17,15 @@ namespace Team.Api.Options
     {
         private const string ProblemDetailsContentType = "application/problem+json";
         private const string ApiKeyHeaderName = "X-Api-Key";
-        //private readonly UserManager<AppUser> userManager;
-        //private readonly IMailServiceRepository repository;
 
         public ApiKeyAuthenticationHandler(
             IOptionsMonitor<ApiKeyAuthenticationOptions> options,
             ILoggerFactory logger,
-            //UserManager<AppUser> userManager,
             UrlEncoder encoder,
             ISystemClock clock
-            //IMailServiceRepository repository
             ) 
             : base(options, logger, encoder, clock)
         {
-            //this.userManager = userManager;
-            //this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -48,7 +42,6 @@ namespace Team.Api.Options
                 return AuthenticateResult.NoResult();
             }
 
-            //var mailServices = repository.GetAllWithUser().FirstOrDefault(k => k.APIkey.ToString() == providedApiKey);
             var mailServices = "";
 
 

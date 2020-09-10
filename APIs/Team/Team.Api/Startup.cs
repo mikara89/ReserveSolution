@@ -19,6 +19,8 @@ using Team.Api.Filters;
 using Team.Api.Options;
 using Team.Data.Persistence;
 using Team.Domains.Models;
+using Team.Messanger.Sender;
+using Team.Messanger.Sender.Options;
 using Team.Service.Commands;
 using Team.Service.Hendlers;
 using Team.Service.Queries;
@@ -46,6 +48,11 @@ namespace Team.Api
 
             services.AddAutoMapper(typeof(Startup));
 
+            #region EventSender
+            services.AddTransient<ITeamEventEmitter, TeamEventEmitter>();
+            #endregion
+
+
             #region MediatoR
             services.AddMediatR(typeof(Startup));
             services.AddTransient<IRequestHandler<GetAllTeamsQuery, List<TeamDto>>, GetAllTeamsHandler>();
@@ -55,10 +62,14 @@ namespace Team.Api
             services.AddTransient<IRequestHandler<TeamDeleteCommand, TeamDto>, TeamDeleteHandler>();
             #endregion
 
-
+            #region SettingsParamiters
+            services.Configure<RabbitMqSettings>(Configuration.GetSection(nameof(RabbitMqSettings)));
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+            #endregion
 
             var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
+            var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
+
             services.AddSwaggerGen(confg =>
             {
                 confg.SwaggerDoc("v1", new OpenApiInfo
@@ -99,6 +110,8 @@ namespace Team.Api
                 });
                 confg.OperationFilter<AuthenticationRequirementsOperationFilter>();
             });
+            
+            
 
             services.AddAuthorization(cfg =>
             {

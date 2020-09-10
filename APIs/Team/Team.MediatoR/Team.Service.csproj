@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Team.Data\Team.Data.csproj" />
     <ProjectReference Include="..\Team.Domains\Team.Domains.csproj" />
+    <ProjectReference Include="..\Team.Messanger.Sender\Team.Messanger.Sender.csproj" />
   </ItemGroup>
 
 </Project>

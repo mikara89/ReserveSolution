@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Team.Data.Models.Entites;
 using Team.Data.Persistence;
 using Team.Domains.Models;
+using Team.Messanger.Sender;
+using Team.Messanger.Sender.Options;
 using Team.Service.Commands;
 using Team.Service.Exceptions;
 
@@ -15,12 +17,14 @@ namespace Team.Service.Hendlers
     {
         private readonly IMapper _mapper;
         private readonly TeamDBContext _context;
+        private readonly ITeamEventEmitter _eventSernder;
         private readonly ILogger<TeamDeleteHandler> _logger;
 
-        public TeamDeleteHandler(IMapper mapper, TeamDBContext context, ILogger<TeamDeleteHandler> logger)
+        public TeamDeleteHandler(IMapper mapper, TeamDBContext context, ITeamEventEmitter eventSernder, ILogger<TeamDeleteHandler> logger)
         {
             _mapper = mapper;
             _context = context;
+            _eventSernder = eventSernder;
             _logger = logger;
         }
 
@@ -41,6 +45,7 @@ namespace Team.Service.Hendlers
             _context.Teams.Remove(team);
 
             await _context.SaveChangesAsync();
+            _eventSernder.Send(team, TopicType.TeamDeletedTopic);
             _logger.LogInformation("Team deleted" + (request.IsSuperUser ? " by SuperUser." : " by owner."));
 
             return _mapper.Map<TeamEntity, TeamDto>(team);

@@ -6,6 +6,5 @@
         public string AUDIENCE { get; set; }
         public string ClientId { get; set; }
         public string AppName { get; set; }
-        public string RedirectSwagger { get; set; } 
     } 
 }
