@@ -43,16 +43,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Service", "APIs\Team\T
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Domains", "APIs\Team\Team.Domains\Team.Domains.csproj", "{5C50E5B0-0875-4B9D-B3A5-66545BBB5EBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Team.Messanger.Sender", "APIs\Team\Team.Messanger.Sender\Team.Messanger.Sender.csproj", "{82789CD4-C537-4504-80E9-4DC718EED30B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Team.Messanger.Sender", "APIs\Team\Team.Messanger.Sender\Team.Messanger.Sender.csproj", "{82789CD4-C537-4504-80E9-4DC718EED30B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83194172-368D-4D4C-AAE9-91948F615DD2}"
-	ProjectSection(SolutionItems) = preProject
-		.editorconfig = .editorconfig
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Player.Api", "APIs\Player\Player.Api\Player.Api.csproj", "{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player.Api", "APIs\Player\Player.Api\Player.Api.csproj", "{AC704CAA-B4DF-4D12-AD6E-27D6A8981FDA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Player.Data", "APIs\Player\Player.Data\Player.Data.csproj", "{EB04B7F1-4268-47CF-BE32-FF0AC0800587}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Player.Data", "APIs\Player\Player.Data\Player.Data.csproj", "{EB04B7F1-4268-47CF-BE32-FF0AC0800587}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

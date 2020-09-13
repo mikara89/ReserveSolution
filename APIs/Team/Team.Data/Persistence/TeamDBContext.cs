@@ -6,7 +6,7 @@ namespace Team.Data.Persistence
 {
     public class TeamDBContext : DbContext
     { 
-        public DbSet<Models.Entites.TeamEntity> Teams { get; set; } 
+        public DbSet<TeamEntity> Teams { get; set; } 
         public TeamDBContext(DbContextOptions options)
             : base(options)
         {
@@ -24,19 +24,19 @@ namespace Team.Data.Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Team.Data.Models.Entites.TeamEntity>()
+            modelBuilder.Entity<TeamEntity>()
                .Property(e => e.CreatedAt)
                .HasDefaultValue(DateTime.Now);
-            modelBuilder.Entity<Team.Data.Models.Entites.TeamEntity>()
+            modelBuilder.Entity<TeamEntity>()
                .Property(e => e.IsActive)
                .HasDefaultValue(true);
-            modelBuilder.Entity<Team.Data.Models.Entites.TeamEntity>()
+            modelBuilder.Entity<TeamEntity>()
                .Property(e => e.RegNumber)
                .IsRequired(true);
-            modelBuilder.Entity<Team.Data.Models.Entites.TeamEntity>()
+            modelBuilder.Entity<TeamEntity>()
                .Property(e => e.TeamName)
                .IsRequired(true);
-            modelBuilder.Entity<Team.Data.Models.Entites.TeamEntity>()
+            modelBuilder.Entity<TeamEntity>()
                .Property(e => e.UserId)
                .IsRequired(true);
 
