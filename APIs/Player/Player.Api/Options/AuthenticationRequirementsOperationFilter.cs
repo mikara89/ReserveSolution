@@ -33,18 +33,6 @@ namespace Player.Api.Options
                     ] = new List<string>()
                 }
             };
-            ///API KEY
-            var schemeAPIKey = new OpenApiSecurityScheme {
-                Reference = new OpenApiReference {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = ApiKeyAuthenticationOptions.DefaultScheme 
-                } 
-            };
-            operation.Security.Add(new OpenApiSecurityRequirement
-            {
-                [schemeAPIKey] = new List<string>()
-            });
-
         }
     }
 }

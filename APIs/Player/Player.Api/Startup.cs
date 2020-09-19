@@ -1,20 +1,27 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
 using AutoMapper;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Player.Api.Filters;
 using Player.Api.Options;
 using Player.Data.Persistence;
+using Player.Domains.Models;
+using Player.Messanger.Sender;
+using Player.Messanger.Sender.Options;
+using Player.Service;
+using Player.Service.Commands;
+using Player.Service.Hendlers;
+using Player.Service.Queries;
+using Player.Service.Repository;
 
 namespace Player.Api
 {
@@ -37,30 +44,35 @@ namespace Player.Api
                 options.UseInMemoryDatabase("PlayerDB");
             });
 
-            
+            services.AddTransient<SeedInvitations>();
 
             services.AddAutoMapper(typeof(Startup));
 
             #region EventEmitter
-            //services.AddTransient<ITeamEventEmitter, TeamEventEmitter>();
+            services.AddTransient<IPlayerEventEmitter, PlayerEventEmitter>();
+            #endregion
+
+            #region Repositories
+            services.AddTransient<IPlayerRepository, PlayerRepository>();
+            services.AddTransient<IInvetationRepository, InvetationRepository>();
             #endregion
 
             #region MediatoR
             services.AddMediatR(typeof(Startup));
-            //services.AddTransient<IRequestHandler<GetAllTeamsQuery, List<TeamDto>>, GetAllTeamsHandler>();
-            //services.AddTransient<IRequestHandler<GetTeamByIdQuery, TeamDto>, GetTeamByIdHandler>();
-            //services.AddTransient<IRequestHandler<TeamCreateCommand, TeamDto>, TeamCreateHandler>();
-            //services.AddTransient<IRequestHandler<TeamUpdateCommand, TeamDto>, TeamUpdateHandler>();
-            //services.AddTransient<IRequestHandler<TeamDeleteCommand, TeamDto>, TeamDeleteHandler>();
+            services.AddTransient<IRequestHandler<GetAllPlayersQuery, List<PlayerDto>>, GetAllPlayersHandler>();
+            services.AddTransient<IRequestHandler<GetPlayerByIdQuery, PlayerDto>, GetPlayerByIdHandler>();
+            services.AddTransient<IRequestHandler<PlayerCreateCommand, PlayerDto>, PlayerCreateHandler>();
+            services.AddTransient<IRequestHandler<PlayerUpdateCommand, PlayerDto>, PlayerUpdateHandler>();
+            services.AddTransient<IRequestHandler<PlayerDeleteCommand, PlayerDto>, PlayerDeleteHandler>();
             #endregion
 
             #region SettingsParamiters
-            //services.Configure<RabbitMqSettings>(Configuration.GetSection(nameof(RabbitMqSettings)));
+            services.Configure<RabbitMqSettings>(Configuration.GetSection(nameof(RabbitMqSettings)));
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
             #endregion
 
             var appSettings = Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
-            //var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
+            var rabbitMqSettings = Configuration.GetSection(nameof(RabbitMqSettings)).Get<RabbitMqSettings>();
 
             services.AddSwaggerGen(confg =>
             {
@@ -93,21 +105,13 @@ namespace Player.Api
                         }
                     }
                 });
-
-                confg.AddSecurityDefinition(ApiKeyAuthenticationOptions.DefaultScheme, new OpenApiSecurityScheme
-                {
-                    Type = SecuritySchemeType.ApiKey,
-                    In = ParameterLocation.Header,
-                    Name = "X-API-KEY", //header with api key
-                });
                 confg.OperationFilter<AuthenticationRequirementsOperationFilter>();
             });
 
             var issuer = Configuration["IDENTITY_AUTHORITY"];
             Console.WriteLine("IDENTITY_AUTHORITY: " + issuer);
-            // configure jwt authentication
+            // configure token authentication
             services.AddAuthentication("Bearer")
-                .AddApiKeySupport(option => { })
                 .AddIdentityServerAuthentication("Bearer", options =>
                 {
                     // required audience of access tokens
@@ -130,17 +134,17 @@ namespace Player.Api
             services.AddControllers(
                 options =>
                 {
-                    //options.Filters.Add<ValidationFilter>();
+                    options.Filters.Add<ValidationFilter>();
                 })
-                //.AddFluentValidation(opt =>
-                //{
-                //    opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
-                //})
+                .AddFluentValidation(opt =>
+                {
+                    opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
+                })
                 ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, SeedInvitations seed)
         {
             if (env.IsDevelopment())
             {
@@ -155,11 +159,12 @@ namespace Player.Api
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Team Api");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Player Api");
             });
 
             app.UseAuthorization();
             app.UseAuthentication();
+            seed.Seed();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -67,6 +67,8 @@ namespace Team.Api.Controllers
             {
                 if (ex is NotExistException)
                     return NotFound();
+                else if (ex is NotAllowedException)
+                    return Forbid();
                 else
                     return BadRequest();
                 throw;
