@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Player.Domains.Models;
 
-namespace Player.Service.Commands 
+namespace Player.Service.Commands
 {
     public class PlayerCreateCommand:IRequest<PlayerDto>
     {

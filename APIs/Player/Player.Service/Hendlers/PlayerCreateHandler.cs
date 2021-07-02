@@ -63,7 +63,7 @@ namespace Player.Service.Hendlers
             try
             {
                 _playerRepository.Create(player);
-                await _invetationRepository.SaveAsync();
+                await _playerRepository.SaveAsync();
                 _logger.LogInformation("Player created.");
                 _eventSernder.Send(player, invitationId, TopicType.PlayerCreatedTopic);
                 return _mapper.Map<PlayerEntity, PlayerDto>(player);

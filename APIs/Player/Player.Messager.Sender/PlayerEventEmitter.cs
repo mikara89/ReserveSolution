@@ -78,12 +78,10 @@ namespace Player.Messanger.Sender
         {
             return topicType
                 .ToString()
-                .Substring(0, topicType.ToString().Length - 6)
+                .Substring(0, topicType.ToString().Length - 5)
+                .Replace("Player","Player.")
                 .ToLower();
         }
     }
 }
 
-//int value = GetValueFromDb();
-//var enumDisplayStatus = (EnumDisplayStatus)value;
-//string stringValue = enumDisplayStatus.ToString();

@@ -15,6 +15,7 @@ using Player.Api.Filters;
 using Player.Api.Options;
 using Player.Data.Persistence;
 using Player.Domains.Models;
+using Player.Messager.Receiver;
 using Player.Messanger.Sender;
 using Player.Messanger.Sender.Options;
 using Player.Service;
@@ -62,6 +63,7 @@ namespace Player.Api
             services.AddTransient<IRequestHandler<GetAllPlayersQuery, List<PlayerDto>>, GetAllPlayersHandler>();
             services.AddTransient<IRequestHandler<GetPlayerByIdQuery, PlayerDto>, GetPlayerByIdHandler>();
             services.AddTransient<IRequestHandler<PlayerCreateCommand, PlayerDto>, PlayerCreateHandler>();
+            services.AddTransient<IRequestHandler<PlayerCreateDefaultCommand, PlayerDto>, PlayerCreateDefaultHandler>();
             services.AddTransient<IRequestHandler<PlayerUpdateCommand, PlayerDto>, PlayerUpdateHandler>();
             services.AddTransient<IRequestHandler<PlayerDeleteCommand, PlayerDto>, PlayerDeleteHandler>();
             #endregion
@@ -141,6 +143,8 @@ namespace Player.Api
                     opt.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly());
                 })
                 ;
+            services.AddTransient<IMessageManager, MessageManager>();
+            services.AddHostedService<MessageReceiver>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

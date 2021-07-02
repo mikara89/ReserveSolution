@@ -66,8 +66,7 @@ namespace Player.Messager.Receiver
         private void OnReceived(object sender, BasicDeliverEventArgs e)
         {
             var content = Encoding.UTF8.GetString(e.Body);
-            var model = JsonConvert.DeserializeObject<object>(content);
-            _messageManager.Handler(model,e.RoutingKey);
+            _messageManager.Handler(content, e.RoutingKey);
         }
         private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)
         {
@@ -97,6 +96,7 @@ namespace Player.Messager.Receiver
             }
 
             _logger.LogInformation("Endpoint for rabbitMq: " + _connection.Endpoint.ToString());
+            _logger.LogInformation($"Exchange name: {_rabbitMqOptions.ExchangeName} and routingKeys: {String.Join(",", _rabbitMqOptions.ReceiverTopicRoutingKeys)}");
         }
         public override void Dispose()
         {

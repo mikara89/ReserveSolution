@@ -4,6 +4,6 @@ namespace Player.Messager.Receiver
 {
     public interface IMessageManager
     {
-        Task Handler(object message, string routingKey);
+        Task Handler(string content, string routingKey); 
     }
 }

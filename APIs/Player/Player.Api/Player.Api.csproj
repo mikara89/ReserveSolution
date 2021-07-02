@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Player.Messager.Receiver\Player.Messager.Receiver.csproj" />
     <ProjectReference Include="..\Player.Service\Player.Service.csproj" />
   </ItemGroup>
 

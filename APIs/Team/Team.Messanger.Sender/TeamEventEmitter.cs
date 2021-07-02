@@ -56,7 +56,8 @@ namespace Team.Messanger.Sender
         {
             return topicType
                 .ToString()
-                .Substring(0, topicType.ToString().Length - 6)
+                .Substring(0, topicType.ToString().Length - 5)
+                .Replace("Team","Team.")
                 .ToLower();
         }
     }
