@@ -5,27 +5,21 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
+      - SELF_URL=https://localhost:8080/
       - IDENTITY_AUTHORITY=http://IdentityService:80/
       - AUTHORITY_ISSUER=https://localhost:5000/ 
     ports:
       - "80"
-      - "443"
+      - "8080:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  team.api:
-    environment:
-      - IDENTITY_AUTHORITY=http://IdentityService:80/
-      - ASPNETCORE_URLS=https://+:443;http://+:80
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-      - "443"
 
 
   identityservice:
     environment:
       - IDENTITY_AUTHORITY=http://10.0.0.10:80/
+      - GW_URI=https://localhost:8080/
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=https://+:443;http://+:80
     ports:
@@ -37,6 +31,31 @@ services:
     restart: on-failure
     depends_on:
             - rabbitmq 
+
+  team.api:
+    environment:
+      - IDENTITY_AUTHORITY=http://IdentityService:80/
+      - ASPNETCORE_URLS=https://+:443;http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+      - "443"
+    restart: on-failure
+    depends_on:
+            - rabbitmq 
+
+    
+  player.api:
+    environment:
+      - IDENTITY_AUTHORITY=http://IdentityService:80/
+      - ASPNETCORE_URLS=http://+:80
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+    restart: on-failure
+    depends_on:
+            - rabbitmq 
+
 
   sendmailservice:
     environment:
@@ -50,13 +69,3 @@ services:
     restart: on-failure
     depends_on:
             - rabbitmq 
-    
-
-  player.api:
-    environment:
-      - IDENTITY_AUTHORITY=http://IdentityService:80/
-      - ASPNETCORE_URLS=http://+:80
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
-

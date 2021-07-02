@@ -100,12 +100,13 @@ namespace IdentityService
 
             var issuer = Configuration["IDENTITY_AUTHORITY"];
             Console.WriteLine("IDENTITY_AUTHORITY: " + issuer);
+            var GWUri = Configuration["GW_URI"];
             services.AddIdentityServer(c=>c.IssuerUri= issuer)
                 //Add AspCore Identity
                 .AddAspNetIdentity<AppUser>()
                 //Mock data for testing
                 .AddInMemoryApiResources(ID4Configuration.GetApis)
-                .AddInMemoryClients(ID4Configuration.GetClients(appSettings))
+                .AddInMemoryClients(ID4Configuration.GetClients(GWUri))
                 .AddInMemoryIdentityResources(ID4Configuration.GetIdentityResources())
                 .AddDeveloperSigningCredential();
         }

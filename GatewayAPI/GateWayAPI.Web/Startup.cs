@@ -67,7 +67,7 @@ namespace GateWayAPI.Web
             app.UseRouting();
 
             var appIdSwagger = Configuration.GetSection(nameof(AppIdSwagger)).Get<AppIdSwagger>();
-            var url = Configuration["url"];
+            var url = Configuration["SELF_URL"];
             app.UseSwaggerForOcelotUI(confg=> {
                 confg.OAuthUsePkce();
                 confg.OAuthClientId(appIdSwagger.ClientId);

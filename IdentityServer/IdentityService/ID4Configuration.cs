@@ -58,7 +58,7 @@ namespace IdentityService
 
        
 
-        public static IEnumerable<Client> GetClients(AppSettings appSettings)
+        public static IEnumerable<Client> GetClients(string uri)
         {
             return new List<Client> {
                 new Client
@@ -73,8 +73,8 @@ namespace IdentityService
                     RequireConsent=false,
 
 
-                    RedirectUris = {$"{appSettings.GWTeamUrl}swagger/oauth2-redirect.html" },
-                    AllowedCorsOrigins = {appSettings.GWTeamUrl[0..^1] },
+                    RedirectUris = {$"{uri}swagger/oauth2-redirect.html" },
+                    AllowedCorsOrigins = {uri[0..^1] },
                     AllowedScopes = {
                         TeamApi.Name,
                         PlayerApi.Name,
